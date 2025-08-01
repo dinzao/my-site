@@ -252,6 +252,7 @@
       animate();
     }
 
+    // Новый обработчик playButton
     playButton.addEventListener('click', async () => {
       playButton.classList.toggle('playing');
       buttonText.style.opacity = 0;
@@ -301,26 +302,21 @@
       buttonText.style.opacity = 1;
     });
 
+    // Обновлённый обработчик для seekSlider
+    seekSlider.addEventListener('input', () => {
+      isSeeking = true;
+    });
+
+    seekSlider.addEventListener('change', () => {
+      audio.currentTime = (seekSlider.value / 100) * audio.duration;
+      isSeeking = false;
+    });
+
     audio.addEventListener('timeupdate', () => {
       if (!isSeeking) {
         const progress = (audio.currentTime / audio.duration) * 100;
         seekSlider.value = progress || 0;
       }
-    });
-
-    // Вот обновленный код для ползунка:
-    seekSlider.addEventListener('input', () => {
-      if (isSeeking) {
-        audio.currentTime = (seekSlider.value / 100) * audio.duration;
-      }
-    });
-
-    seekSlider.addEventListener('mousedown', () => {
-      isSeeking = true;
-    });
-
-    seekSlider.addEventListener('mouseup', () => {
-      isSeeking = false;
     });
 
     audio.addEventListener('ended', () => {
