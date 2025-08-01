@@ -1,9 +1,9 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
-  <title>Audio Visualizer</title>
+  <title>Audio Visualizer with Fluid Cursor Trail</title>
   <style>
     body {
       background-color: #1e1e1e;
@@ -17,110 +17,219 @@
       color: white;
       cursor: none;
       overflow-x: hidden;
+      position: relative;
     }
 
-    canvas {
+    canvas#visualizer {
       margin-bottom: 30px;
       background: transparent;
       transition: opacity 1s ease;
-    }
-
-    .play-button {
-      background: linear-gradient(90deg, #00ffe7, #00b39f);
-      border: none;
-      border-radius: 999px;
-      padding: 15px 30px;
-      color: black;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: none !important;
-      box-shadow: 0 0 10px #00fff2;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: width 0.4s ease, background 0.3s ease, transform 0.2s ease;
-      width: 140px;
-    }
-
-    .play-button.playing {
-      width: 200px;
-    }
-
-    .play-button span {
-      position: relative;
       z-index: 1;
-      display: inline-block;
-      transition: opacity 0.3s ease;
+      position: relative;
     }
 
-    #seekSlider {
-      width: 300px;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 5px;
-      border-radius: 3px;
-      background: #444;
-      box-shadow: 0 0 5px #00fff2;
-      outline: none;
-      cursor: none !important;
-      user-select: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    canvas#fluidCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: auto;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
     }
+
+    canvas#trailCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9998;
+      display: none; /* Скрываем старый трейл */
+    }
+
+         .play-button {
+       background: linear-gradient(90deg, #00ffe7, #00b39f);
+       border: none;
+       border-radius: 999px;
+               padding: 0;
+       color: black;
+       font-weight: bold;
+       font-size: 16px;
+       cursor: none !important;
+       box-shadow: 0 0 10px #00fff2;
+       margin-bottom: 20px;
+       position: relative;
+       overflow: hidden;
+       transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+               width: 60px;
+        height: 60px;
+       z-index: 10;
+     }
+
+     .play-button.playing {
+       width: 120px;
+       height: 60px;
+       border-radius: 30px;
+     }
+
+                   .play-button span {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        transition: opacity 0.3s ease;
+      }
+
+                                               .play-button svg {
+          width: 24px;
+          height: 24px;
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+                                                       .play-button .play-icon {
+           transform: translate(-50%, -50%) scale(1);
+           opacity: 1;
+           display: block;
+         }
+
+               .play-button .pause-icon {
+           transform: translate(-50%, -50%) scale(0.8);
+           opacity: 0;
+           display: block;
+         }
+
+         .play-button.playing .play-icon {
+           transform: translate(-50%, -50%) scale(0.6);
+           opacity: 0;
+         }
+
+         .play-button.playing .pause-icon {
+           transform: translate(-50%, -50%) scale(1);
+           opacity: 1;
+         }
+
+               .play-button:hover svg {
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .play-button.playing:hover .play-icon {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 0;
+        }
+
+        .play-button.playing:hover .pause-icon {
+          transform: translate(-50%, -50%) scale(1.1);
+          opacity: 1;
+        }
+
+        /* Эффект капли */
+        .play-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(90deg, #00ffe7, #00b39f);
+          border-radius: inherit;
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: -1;
+        }
+
+        .play-button.playing::before {
+          transform: scale(1.05);
+          filter: blur(2px);
+        }
+
+         #seekSlider {
+       width: 300px;
+       height: 6px;
+       background: linear-gradient(to right, #ffffff var(--value, 0%), #444 var(--value, 0%));
+       border-radius: 3px;
+       outline: none;
+       -webkit-appearance: none;
+       appearance: none;
+       cursor: none !important;
+       transition: background 0.3s ease, box-shadow 0.3s ease;
+               box-shadow: 0 0 2px rgba(255, 255, 255, 0.15);
+       z-index: 10;
+     }
 
     #seekSlider:hover {
-      transform: scale(1.03);
+      background: linear-gradient(to right, #00fff2 var(--value, 0%), #444 var(--value, 0%));
       box-shadow: 0 0 8px #00fff2;
     }
 
     #seekSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #00fff2;
+      box-shadow: 0 0 5px #00fff2;
       border: none;
       cursor: none !important;
-      box-shadow: 0 0 5px #00fff2;
+      opacity: 0;
+      transition: opacity 0.3s ease, background 0.3s ease, transform 0.2s ease;
+    }
+
+    #seekSlider:hover::-webkit-slider-thumb {
+      opacity: 1;
+      background: #00fff2;
+      transform: scale(1.2);
     }
 
     #seekSlider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #00fff2;
+      box-shadow: 0 0 5px #00fff2;
       border: none;
       cursor: none !important;
-      box-shadow: 0 0 5px #00fff2;
+      opacity: 0;
+      transition: opacity 0.3s ease, background 0.3s ease, transform 0.2s ease;
     }
 
-    #customCursor {
-      position: fixed;
-      width: 32px;
-      height: 32px;
+    #seekSlider:hover::-moz-range-thumb {
+      opacity: 1;
+      background: #00fff2;
+      transform: scale(1.2);
+    }
+
+         #customCursor {
+       position: fixed;
+       width: 32px;
+       height: 32px;
       pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.15s ease, opacity 0.2s ease;
-      border-radius: 6px;
-      overflow: hidden;
-      opacity: 1; /* Сделано видимым */
-      background: linear-gradient(90deg, #ff0000, #ff9900, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-      background-size: 400% 400%;
-      animation: rainbow 5s linear infinite;
-      box-shadow: 0 0 25px #fff; /* Усиленный свет */
-      animation: rainbow-border 5s linear infinite;
-    }
+       z-index: 99999;
+       transform: translate(-50%, -50%);
+       transition: transform 0.15s ease, opacity 0.2s ease;
+       border-radius: 6px;
+       overflow: hidden;
+       opacity: 1;
+       background: linear-gradient(90deg, #ff0000, #ff9900, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+       background-size: 400% 400%;
+       animation: rainbow-border 5s linear infinite;
+       box-shadow: 0 0 15px #fff;
+     }
 
-    #customCursor video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    #customCursor * {
+      pointer-events: none !important;
     }
 
     #customCursor.visible {
-      opacity: 1;
+      /* opacity теперь управляется JavaScript */
     }
 
     #customCursor.click {
@@ -131,35 +240,41 @@
       transform: translate(-50%, -50%) scale(1.3);
     }
 
-    a, button, input, .play-button {
-      cursor: none !important;
-    }
-
-    #footerNote {
-      position: fixed;
-      bottom: 5px;
+    #customCursor video {
       width: 100%;
-      text-align: center;
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.1);
-      font-family: monospace;
-      user-select: none;
-      pointer-events: none;
-      z-index: 10000;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    @keyframes rainbow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.3);
+      font-family: sans-serif;
+      z-index: 10;
     }
 
-    @keyframes rainbow-border {
-      0% { box-shadow: 0 0 25px #ff0000; }
-      25% { box-shadow: 0 0 25px #00ff00; }
-      50% { box-shadow: 0 0 25px #0000ff; }
-      75% { box-shadow: 0 0 25px #ff00ff; }
-      100% { box-shadow: 0 0 25px #ff0000; }
+    .footer a,
+    .footer a:hover,
+    .footer a:active,
+    .footer a:focus {
+      cursor: none !important;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .footer a:hover {
+      transform: scale(2) !important;
+    }
+    .footer #dinza-link {
+      display: inline-block;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
+      padding: 10px 24px;
+    }
+    .footer #dinza-link:hover {
+      transform: scale(2) !important;
+      text-shadow: 0 0 8px #00fff2, 0 0 2px #fff;
     }
 
     @media (hover: none), (pointer: coarse) {
@@ -173,26 +288,200 @@
         cursor: pointer !important;
       }
       #seekSlider {
-        user-select: auto !important;
-      }
-      .play-button {
-        width: 120px;
-        padding: 12px 24px;
-        font-size: 14px;
-        margin-bottom: 15px;
-      }
-      #seekSlider {
         width: 260px;
       }
     }
+
+    @keyframes rainbow-border {
+      0% { box-shadow: 0 0 15px #ff0000; }
+      25% { box-shadow: 0 0 15px #00ff00; }
+      50% { box-shadow: 0 0 15px #0000ff; }
+      75% { box-shadow: 0 0 15px #ff00ff; }
+      100% { box-shadow: 0 0 15px #ff0000; }
+    }
+
+         .fluid-toggle {
+       position: fixed;
+       top: 20px;
+       right: 20px;
+       z-index: 10000;
+       cursor: none;
+     }
+
+         .switch {
+       position: relative;
+       display: inline-block;
+       width: 50px;
+       height: 24px;
+       cursor: none;
+     }
+
+         .switch input {
+       opacity: 0;
+       width: 0;
+       height: 0;
+       cursor: none;
+     }
+
+         .slider {
+       position: absolute;
+       cursor: none;
+       background-color: #555;
+       border-radius: 34px;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       transition: 0.4s;
+     }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #00fff2;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .background-select {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      background: rgba(30,30,30,0.85);
+      border-radius: 12px;
+      padding: 8px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-size: 16px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: none;
+    }
+    .background-select label, .background-select select {
+      cursor: none;
+    }
+    .background-select select {
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 16px;
+      outline: none;
+    }
+    @font-face {
+      font-family: 'Benzin';
+      src: url('benzin-bold.woff2') format('woff2');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+    .background-select,
+    .background-select label,
+    .background-select select {
+      font-family: 'Benzin', sans-serif;
+      font-weight: bold;
+    }
+    .background-select select {
+  background: #181c20;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 18px;
+  font-size: 18px;
+  font-family: 'Benzin', sans-serif;
+  font-weight: bold;
+  outline: none;
+  box-shadow: 0 2px 12px 0 rgba(0,255,242,0.12);
+  transition: box-shadow 0.3s cubic-bezier(.4,0,.2,1), background 0.3s;
+  appearance: none;
+  position: relative;
+  z-index: 2;
+}
+
+.background-select select:focus {
+  box-shadow: 0 0 0 3px #00fff2, 0 2px 12px 0 rgba(0,255,242,0.18);
+  background: #23272b;
+}
+
+.background-select select option {
+  background: #23272b;
+  color: #fff;
+  font-family: 'Benzin', sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.background-select select option:checked,
+.background-select select option:hover {
+  background: #007aff;
+  color: #fff;
+  text-shadow: 0 0 8px #00fff2, 0 0 2px #fff;
+}
+
+.background-select label {
+  text-shadow: 0 0 6px #00fff2, 0 0 2px #fff;
+  font-size: 18px;
+  font-family: 'Benzin', sans-serif;
+  font-weight: bold;
+}
+
+.background-select {
+  background: rgba(24,28,32,0.92);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(0,255,242,0.10);
+  padding: 10px 22px;
+  gap: 12px;
+  font-size: 18px;
+  transition: box-shadow 0.3s;
+}
+
+.background-select select::-ms-expand {
+  display: none;
+}
+.background-select select::-webkit-scrollbar {
+  width: 8px;
+  background: #23272b;
+}
+.background-select select::-webkit-scrollbar-thumb {
+  background: #00fff2;
+  border-radius: 8px;
+}
   </style>
+ 
 </head>
 <body>
 
   <canvas id="visualizer" width="600" height="120" style="opacity: 0;"></canvas>
-  <button class="play-button" id="playButton">
-    <span id="buttonText">Play</span>
-  </button>
+  <canvas id="fluidCanvas"></canvas>
+  <canvas id="trailCanvas"></canvas>
+
+                       <button class="play-button" id="playButton">
+       <span id="buttonText">
+         <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+           <path d="M8 5v14l11-7z"/>
+         </svg>
+                   <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="5" width="4" height="14" rx="2" ry="2"/>
+            <rect x="14" y="5" width="4" height="14" rx="2" ry="2"/>
+          </svg>
+       </span>
+     </button>
   <input type="range" id="seekSlider" value="0" min="0" max="100" step="1" />
   <audio id="audio" src="JAWNY - honeypie sped up.mp3" crossorigin="anonymous"></audio>
 
@@ -200,25 +489,111 @@
     <video id="cursorVideo" src="video_2025-07-31_22-33-25.mp4" autoplay muted loop playsinline></video>
   </div>
 
-  <div id="footerNote">by dinza</div>
+  <div class="footer"><span id="dinza-link" style="color: inherit; text-decoration: none;">by dinza</span></div>
+
+     <!-- Переключатель жидкости -->
+   <div class="background-select">
+     <label for="backgroundSelect" style="user-select:none;">Фон:</label>
+     <select id="backgroundSelect">
+       <option value="default">Обычный</option>
+       <option value="fluid">Fluid</option>
+     </select>
+   </div>
+
+  <!-- Include WebGL Fluid -->
+  <script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.3"></script>
 
   <script>
     const canvas = document.getElementById('visualizer');
     const ctx = canvas.getContext('2d');
-    const playButton = document.getElementById('playButton');
-    const buttonText = document.getElementById('buttonText');
+                               const playButton = document.getElementById('playButton');
+       const buttonText = document.getElementById('buttonText');
+       const playIcon = document.querySelector('.play-icon');
+       const pauseIcon = document.querySelector('.pause-icon');
     const audio = document.getElementById('audio');
     const seekSlider = document.getElementById('seekSlider');
     const customCursor = document.getElementById('customCursor');
     const cursorVideo = document.getElementById('cursorVideo');
+    const trailCanvas = document.getElementById('trailCanvas');
+    const trailCtx = trailCanvas.getContext('2d');
+    const fluidCanvas = document.getElementById('fluidCanvas');
+    const toggleFluidCheckbox = document.getElementById('toggleFluid');
+    
+    let fluidSim = null;
+
+    // Убираем старый трейл - используем только WebGL Fluid
+
+    function startFluid() {
+      fluidCanvas.style.display = 'block';
+      if (!fluidSim) {
+        fluidSim = WebGLFluid(fluidCanvas, {
+          TRIGGER: 'hover',
+          IMMEDIATE: true,
+          AUTO: false,
+          SPLAT_RADIUS: 0.15,
+          SPLAT_FORCE: 3000,
+          COLORFUL: true,
+          CURL: 20,
+          DENSITY_DISSIPATION: 0.95,
+          VELOCITY_DISSIPATION: 0.95,
+          PRESSURE: 0.8,
+          PRESSURE_ITERATIONS: 20,
+          SHADING: true,
+          BLOOM: true,
+          SUNRAYS: true,
+          TRANSPARENT: false,
+          BACKGROUND_COLOR: { r: 0, g: 0, b: 0 }
+        });
+        
+        // Fluid canvas готов к работе
+      } else {
+        fluidCanvas.style.display = 'block';
+        // Просто возобновляем анимацию
+        // if (fluidSim && fluidSim.PAUSED !== undefined) {
+        //   fluidSim.PAUSED = false;
+        // }
+      }
+    }
+
+    function stopFluid() {
+      fluidCanvas.style.display = 'none';
+      // Останавливаем анимацию, но не удаляем simulation
+      // if (fluidSim && fluidSim.PAUSED !== undefined) {
+      //   fluidSim.PAUSED = true;
+      // }
+    }
+
+    // Удаляем старый код toggleFluidCheckbox и заменяем на select
+    const backgroundSelect = document.getElementById('backgroundSelect');
+    backgroundSelect.addEventListener('change', function() {
+      if (this.value === 'fluid') {
+        startFluid();
+        document.body.style.background = '#000';
+      } else {
+        stopFluid();
+        document.body.style.background = '#222';
+      }
+    });
+    // При загрузке страницы выставить фон по умолчанию
+    window.addEventListener('DOMContentLoaded', function() {
+      if (backgroundSelect.value === 'fluid') {
+        startFluid();
+        document.body.style.background = '#000';
+      } else {
+        stopFluid();
+        document.body.style.background = '#222';
+      }
+    });
 
     let audioContext, analyser, source, dataArray, animationId;
     let isInitialized = false;
     let isSeeking = false;
     let fadeOutProgress = 0;
 
+    // Убираем обработчик старого трейла
+
     function draw() {
-      const bufferLength = analyser.frequencyBinCount;
+    const bufferLength = analyser.frequencyBinCount;
       const half = Math.floor(bufferLength / 2);
       const centerX = canvas.width / 2;
       const barSpacing = 4;
@@ -226,12 +601,12 @@
 
       function animate() {
         animationId = requestAnimationFrame(animate);
-        analyser.getByteFrequencyData(dataArray);
+      analyser.getByteFrequencyData(dataArray);
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         let allZero = true;
-        for (let i = 0; i < bufferLength; i++) {
+      for (let i = 0; i < bufferLength; i++) {
           if (dataArray[i] > 0) { allZero = false; break; }
         }
 
@@ -267,135 +642,153 @@
       animate();
     }
 
-    playButton.addEventListener('click', async () => {
-      playButton.classList.toggle('playing');
-      buttonText.style.opacity = 0;
+                                       playButton.addEventListener('click', async () => {
+         playButton.classList.toggle('playing');
 
-      try {
-        if (!isInitialized) {
-          if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          }
+         try {
+           if (!isInitialized) {
+             if (!audioContext) {
+               audioContext = new (window.AudioContext || window.webkitAudioContext)();
+             }
 
-          if (audioContext.state === "suspended") {
-            await audioContext.resume();
-          }
+             if (audioContext.state === "suspended") {
+               await audioContext.resume();
+             }
 
-          if (!source) {
-            source = audioContext.createMediaElementSource(audio);
-            analyser = audioContext.createAnalyser();
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-            analyser.fftSize = 64;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-          }
+             if (!source) {
+               source = audioContext.createMediaElementSource(audio);
+               analyser = audioContext.createAnalyser();
+               source.connect(analyser);
+               analyser.connect(audioContext.destination);
+               analyser.fftSize = 64;
+               dataArray = new Uint8Array(analyser.frequencyBinCount);
+             }
 
-          await audio.play();
-          draw();
-          isInitialized = true;
-          buttonText.textContent = "Pause";
-          canvas.style.opacity = 1;
-        } else {
-          if (audio.paused) {
-            if (audioContext.state === "suspended") {
-              await audioContext.resume();
-            }
-            await audio.play();
-            buttonText.textContent = "Pause";
-            draw();
-          } else {
-            audio.pause();
-            buttonText.textContent = "Play";
-          }
-        }
-      } catch (err) {
-        console.error("Ошибка воспроизведения:", err);
-        alert("Браузер заблокировал воспроизведение. Попробуйте снова нажать Play.");
-      }
-
-      buttonText.style.opacity = 1;
-    });
+             await audio.play();
+             draw();
+             isInitialized = true;
+             canvas.style.opacity = 1;
+           } else {
+             if (audio.paused) {
+               if (audioContext.state === "suspended") {
+                 await audioContext.resume();
+               }
+               await audio.play();
+               draw();
+             } else {
+               audio.pause();
+             }
+           }
+         } catch (err) {
+           console.error("Ошибка воспроизведения:", err);
+           alert("Браузер заблокировал воспроизведение. Попробуйте снова нажать Play.");
+         }
+       });
 
     audio.addEventListener('timeupdate', () => {
       if (!isSeeking) {
         const progress = (audio.currentTime / audio.duration) * 100;
         seekSlider.value = progress || 0;
+        seekSlider.style.setProperty('--value', `${progress}%`);
       }
     });
 
-    seekSlider.addEventListener('mousedown', () => isSeeking = true);
-    seekSlider.addEventListener('mouseup', () => {
+    seekSlider.addEventListener('input', () => {
+      isSeeking = true;
+      const seekTo = (seekSlider.value / 100) * audio.duration;
+      seekSlider.style.setProperty('--value', `${seekSlider.value}%`);
+      audio.currentTime = seekTo;
+    });
+
+    seekSlider.addEventListener('change', () => {
       isSeeking = false;
-      audio.currentTime = (seekSlider.value / 100) * audio.duration;
     });
 
-    audio.addEventListener('ended', () => {
-      cancelAnimationFrame(animationId);
-      fadeOutProgress = 0;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      buttonText.textContent = "Play";
-      playButton.classList.remove('playing');
-      seekSlider.value = 0;
+                                       audio.addEventListener('ended', () => {
+         playButton.classList.remove('playing');
+         seekSlider.value = 0;
+         seekSlider.style.setProperty('--value', `0%`);
+         audio.currentTime = 0;
+       });
+
+    // Простая анимация курсора без трейла
+    customCursor.classList.add('visible');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let isCursorInWindow = true;
+
+    window.addEventListener('mouseleave', () => {
+      isCursorInWindow = false;
     });
-
-    // Кастомный курсор
-    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-    if (isDesktop) {
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-      let cursorX = mouseX;
-      let cursorY = mouseY;
-
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (!customCursor.classList.contains('visible')) {
-          customCursor.classList.add('visible');
-        }
-      });
-
-      function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
-
-        customCursor.style.left = cursorX + 'px';
-        customCursor.style.top = cursorY + 'px';
-
-        requestAnimationFrame(animateCursor);
+    window.addEventListener('mouseenter', () => {
+      isCursorInWindow = true;
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget && !e.toElement) {
+        isCursorInWindow = false;
       }
+    });
+    document.addEventListener('mouseover', (e) => {
+      isCursorInWindow = true;
+    });
 
-      animateCursor();
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
 
-      document.addEventListener('mouseenter', () => {
-        customCursor.classList.add('visible');
-      });
+    // Добавляем анимацию нажатия для курсора
+    document.addEventListener('mousedown', () => {
+      customCursor.classList.add('click');
+    });
 
-      document.addEventListener('mouseleave', () => {
-        customCursor.classList.remove('visible');
-      });
+    document.addEventListener('mouseup', () => {
+      customCursor.classList.remove('click');
+    });
 
-      document.addEventListener('mousedown', () => {
-        customCursor.classList.add('click');
-      });
+    // Добавляем анимацию при наведении на интерактивные элементы
+    const interactiveElements = [playButton, seekSlider, backgroundSelect];
+    
+    interactiveElements.forEach(element => {
+      if (element) {
+        element.addEventListener('mouseenter', () => {
+          customCursor.classList.add('hover');
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          customCursor.classList.remove('hover');
+        });
+      }
+    });
 
-      document.addEventListener('mouseup', () => {
-        customCursor.classList.remove('click');
-      });
+         function animateCursor() {
+       cursorX += (mouseX - cursorX) * 0.15;
+       cursorY += (mouseY - cursorY) * 0.15;
 
-      document.querySelectorAll('a, button, input').forEach(el => {
-        el.addEventListener('mouseenter', () => customCursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => customCursor.classList.remove('hover'));
-      });
+       // Проверяем, находится ли курсор в пределах страницы
+       const isInViewport = mouseX >= 0 && mouseX <= window.innerWidth && 
+                           mouseY >= 0 && mouseY <= window.innerHeight;
+       
+       // Если мышь вне окна — opacity 0
+       const targetOpacity = (isInViewport && isCursorInWindow) ? 1 : 0;
+       // Плавно изменяем прозрачность
+       const currentOpacity = parseFloat(customCursor.style.opacity) || 1;
+       const newOpacity = currentOpacity + (targetOpacity - currentOpacity) * 0.1;
+       
+       customCursor.style.opacity = newOpacity;
+       customCursor.style.left = cursorX + 'px';
+       customCursor.style.top = cursorY + 'px';
 
-      cursorVideo.addEventListener('timeupdate', () => {
-        if (cursorVideo.currentTime >= cursorVideo.duration - 0.15) {
-          cursorVideo.currentTime = 0;
-        }
-      });
-    } else {
-      customCursor.style.display = "none";
-    }
+       requestAnimationFrame(animateCursor);
+     }
+    animateCursor();
+
+    document.getElementById('dinza-link').addEventListener('click', function() {
+      window.open('https://t.me/oesxzu', '_blank');
+    });
   </script>
 </body>
 </html>
