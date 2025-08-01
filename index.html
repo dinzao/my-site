@@ -104,11 +104,11 @@
       transition: transform 0.15s ease, opacity 0.2s ease;
       border-radius: 6px;
       overflow: hidden;
-      opacity: 0;
+      opacity: 1; /* Сделано видимым */
       background: linear-gradient(90deg, #ff0000, #ff9900, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
       background-size: 400% 400%;
       animation: rainbow 5s linear infinite;
-      box-shadow: 0 0 15px #fff;
+      box-shadow: 0 0 25px #fff; /* Усиленный свет */
       animation: rainbow-border 5s linear infinite;
     }
 
@@ -135,6 +135,19 @@
       cursor: none !important;
     }
 
+    #footerNote {
+      position: fixed;
+      bottom: 5px;
+      width: 100%;
+      text-align: center;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.1);
+      font-family: monospace;
+      user-select: none;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -142,11 +155,11 @@
     }
 
     @keyframes rainbow-border {
-      0% { box-shadow: 0 0 15px #ff0000; }
-      25% { box-shadow: 0 0 15px #00ff00; }
-      50% { box-shadow: 0 0 15px #0000ff; }
-      75% { box-shadow: 0 0 15px #ff00ff; }
-      100% { box-shadow: 0 0 15px #ff0000; }
+      0% { box-shadow: 0 0 25px #ff0000; }
+      25% { box-shadow: 0 0 25px #00ff00; }
+      50% { box-shadow: 0 0 25px #0000ff; }
+      75% { box-shadow: 0 0 25px #ff00ff; }
+      100% { box-shadow: 0 0 25px #ff0000; }
     }
 
     @media (hover: none), (pointer: coarse) {
@@ -186,6 +199,8 @@
   <div id="customCursor">
     <video id="cursorVideo" src="video_2025-07-31_22-33-25.mp4" autoplay muted loop playsinline></video>
   </div>
+
+  <div id="footerNote">by dinza</div>
 
   <script>
     const canvas = document.getElementById('visualizer');
@@ -252,7 +267,6 @@
       animate();
     }
 
-    // Новый обработчик playButton
     playButton.addEventListener('click', async () => {
       playButton.classList.toggle('playing');
       buttonText.style.opacity = 0;
@@ -302,21 +316,17 @@
       buttonText.style.opacity = 1;
     });
 
-    // Обновлённый обработчик для seekSlider
-    seekSlider.addEventListener('input', () => {
-      isSeeking = true;
-    });
-
-    seekSlider.addEventListener('change', () => {
-      audio.currentTime = (seekSlider.value / 100) * audio.duration;
-      isSeeking = false;
-    });
-
     audio.addEventListener('timeupdate', () => {
       if (!isSeeking) {
         const progress = (audio.currentTime / audio.duration) * 100;
         seekSlider.value = progress || 0;
       }
+    });
+
+    seekSlider.addEventListener('mousedown', () => isSeeking = true);
+    seekSlider.addEventListener('mouseup', () => {
+      isSeeking = false;
+      audio.currentTime = (seekSlider.value / 100) * audio.duration;
     });
 
     audio.addEventListener('ended', () => {
