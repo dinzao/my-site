@@ -181,7 +181,7 @@
     <span id="buttonText">Play</span>
   </button>
   <input type="range" id="seekSlider" value="0" min="0" max="100" step="1" />
-  <audio id="audio" src="JAWNY - honeypie sped up.mp3" crossorigin="anonymous" playsinline></audio>
+  <audio id="audio" src="JAWNY - honeypie sped up.mp3" crossorigin="anonymous"></audio>
 
   <div id="customCursor">
     <video id="cursorVideo" src="video_2025-07-31_22-33-25.mp4" autoplay muted loop playsinline></video>
@@ -252,7 +252,6 @@
       animate();
     }
 
-    // Исправленный обработчик playButton с muted play для мобильных
     playButton.addEventListener('click', async () => {
       playButton.classList.toggle('playing');
       buttonText.style.opacity = 0;
@@ -276,12 +275,7 @@
             dataArray = new Uint8Array(analyser.frequencyBinCount);
           }
 
-          // Запускаем сначала с muted, чтобы разблокировать воспроизведение на мобиле
-          audio.muted = true;
           await audio.play();
-          // Потом включаем звук
-          audio.muted = false;
-
           draw();
           isInitialized = true;
           buttonText.textContent = "Pause";
@@ -314,10 +308,19 @@
       }
     });
 
-    seekSlider.addEventListener('mousedown', () => isSeeking = true);
+    // Вот обновленный код для ползунка:
+    seekSlider.addEventListener('input', () => {
+      if (isSeeking) {
+        audio.currentTime = (seekSlider.value / 100) * audio.duration;
+      }
+    });
+
+    seekSlider.addEventListener('mousedown', () => {
+      isSeeking = true;
+    });
+
     seekSlider.addEventListener('mouseup', () => {
       isSeeking = false;
-      audio.currentTime = (seekSlider.value / 100) * audio.duration;
     });
 
     audio.addEventListener('ended', () => {
