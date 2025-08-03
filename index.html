@@ -46,123 +46,122 @@
       width: 100vw;
       height: 100vh;
       z-index: 9998;
-      display: none; /* Скрываем старый трейл */
+      display: none;
     }
 
-         .play-button {
-       background: linear-gradient(90deg, #00ffe7, #00b39f);
-       border: none;
-       border-radius: 999px;
-               padding: 0;
-       color: black;
-       font-weight: bold;
-       font-size: 16px;
-       cursor: none !important;
-       box-shadow: 0 0 10px #00fff2;
-       margin-bottom: 20px;
-       position: relative;
-       overflow: hidden;
-       transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-               width: 60px;
-        height: 60px;
-       z-index: 10;
-     }
+    .play-button {
+      background: linear-gradient(90deg, #00ffe7, #00b39f);
+      border: none;
+      border-radius: 999px;
+      padding: 0;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: none !important;
+      box-shadow: 0 0 10px #00fff2;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 60px;
+      height: 60px;
+      z-index: 10;
+    }
 
-     .play-button.playing {
-       width: 120px;
-       height: 60px;
-       border-radius: 30px;
-     }
+    .play-button.playing {
+      width: 120px;
+      height: 60px;
+      border-radius: 30px;
+    }
 
-                   .play-button span {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        transition: opacity 0.3s ease;
-      }
+    .play-button span {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.3s ease;
+    }
 
-                                               .play-button svg {
-          width: 24px;
-          height: 24px;
-          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
+    .play-button svg {
+      width: 24px;
+      height: 24px;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-                                                       .play-button .play-icon {
-           transform: translate(-50%, -50%) scale(1);
-           opacity: 1;
-           display: block;
-         }
+    .play-button .play-icon {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      display: block;
+    }
 
-               .play-button .pause-icon {
-           transform: translate(-50%, -50%) scale(0.8);
-           opacity: 0;
-           display: block;
-         }
+    .play-button .pause-icon {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+      display: block;
+    }
 
-         .play-button.playing .play-icon {
-           transform: translate(-50%, -50%) scale(0.6);
-           opacity: 0;
-         }
+    .play-button.playing .play-icon {
+      transform: translate(-50%, -50%) scale(0.6);
+      opacity: 0;
+    }
 
-         .play-button.playing .pause-icon {
-           transform: translate(-50%, -50%) scale(1);
-           opacity: 1;
-         }
+    .play-button.playing .pause-icon {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
 
-               .play-button:hover svg {
-          transform: translate(-50%, -50%) scale(1.1);
-        }
+    .play-button:hover svg {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
 
-        .play-button.playing:hover .play-icon {
-          transform: translate(-50%, -50%) scale(0.8);
-          opacity: 0;
-        }
+    .play-button.playing:hover .play-icon {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+    }
 
-        .play-button.playing:hover .pause-icon {
-          transform: translate(-50%, -50%) scale(1.1);
-          opacity: 1;
-        }
+    .play-button.playing:hover .pause-icon {
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 1;
+    }
 
-        /* Эффект капли */
-        .play-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(90deg, #00ffe7, #00b39f);
-          border-radius: inherit;
-          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: -1;
-        }
+    .play-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, #00ffe7, #00b39f);
+      border-radius: inherit;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: -1;
+    }
 
-        .play-button.playing::before {
-          transform: scale(1.05);
-          filter: blur(2px);
-        }
+    .play-button.playing::before {
+      transform: scale(1.05);
+      filter: blur(2px);
+    }
 
-         #seekSlider {
-       width: 300px;
-       height: 6px;
-       background: linear-gradient(to right, #ffffff var(--value, 0%), #444 var(--value, 0%));
-       border-radius: 3px;
-       outline: none;
-       -webkit-appearance: none;
-       appearance: none;
-       cursor: none !important;
-       transition: background 0.3s ease, box-shadow 0.3s ease;
-               box-shadow: 0 0 2px rgba(255, 255, 255, 0.15);
-       z-index: 10;
-     }
+    #seekSlider {
+      width: 300px;
+      height: 6px;
+      background: linear-gradient(to right, #ffffff var(--value, 0%), #444 var(--value, 0%));
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: none !important;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 2px rgba(255, 255, 255, 0.15);
+      z-index: 10;
+    }
 
     #seekSlider:hover {
       background: linear-gradient(to right, #00fff2 var(--value, 0%), #444 var(--value, 0%));
@@ -207,29 +206,28 @@
       transform: scale(1.2);
     }
 
-         #customCursor {
-       position: fixed;
-       width: 32px;
-       height: 32px;
+    #customCursor {
+      position: fixed;
+      width: 32px;
+      height: 32px;
       pointer-events: none;
-       z-index: 99999;
-       transform: translate(-50%, -50%);
-       transition: transform 0.15s ease, opacity 0.2s ease;
-       border-radius: 6px;
-       overflow: hidden;
-       opacity: 1;
-       background: linear-gradient(90deg, #ff0000, #ff9900, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-       background-size: 400% 400%;
-       animation: rainbow-border 5s linear infinite;
-       box-shadow: 0 0 15px #fff;
-     }
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      border-radius: 6px;
+      overflow: hidden;
+      opacity: 1;
+      background: linear-gradient(90deg, #ff0000, #ff9900, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      background-size: 400% 400%;
+      animation: rainbow-border 5s linear infinite;
+      box-shadow: 0 0 15px #fff;
+    }
 
     #customCursor * {
       pointer-events: none !important;
     }
 
     #customCursor.visible {
-      /* opacity теперь управляется JavaScript */
     }
 
     #customCursor.click {
@@ -300,88 +298,221 @@
       100% { box-shadow: 0 0 15px #ff0000; }
     }
 
-         .fluid-toggle {
-       position: fixed;
-       top: 20px;
-       right: 20px;
-       z-index: 10000;
-       cursor: none;
-     }
+    /* Обновленные стили для кнопок управления */
+    .control-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 10000;
+    }
 
-         .switch {
-       position: relative;
-       display: inline-block;
-       width: 50px;
-       height: 24px;
-       cursor: none;
-     }
-
-         .switch input {
-       opacity: 0;
-       width: 0;
-       height: 0;
-       cursor: none;
-     }
-
-         .slider {
-       position: absolute;
-       cursor: none;
-       background-color: #555;
-       border-radius: 34px;
-       top: 0;
-       left: 0;
-       right: 0;
-       bottom: 0;
-       transition: 0.4s;
-     }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.4s;
+    .control-button {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s, opacity 0.2s;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #00fff2;
     }
 
-    input:checked + .slider {
-      background-color: #00fff2;
+    .control-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(0, 255, 242, 0.7);
     }
 
-    input:checked + .slider:before {
-      transform: translateX(26px);
+    .control-button svg {
+      width: 20px;
+      height: 20px;
     }
+
+    .toggle-ui-button {
+      background: rgba(255, 58, 48, 0.7);
+      border: 1px solid #ff3a30;
+    }
+
+    .file-upload-button-mobile {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .background-select-button {
+      background: rgba(255, 204, 0, 0.7);
+      border: 1px solid #ffcc00;
+    }
+
+    /* Обновленные стили для загрузчика файлов */
+    .file-upload-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10000;
+      background: rgba(24,28,32,0.85);
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 4px 30px rgba(0,255,242,0.25);
+      font-family: 'Benzin', sans-serif;
+      font-weight: bold;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 300px;
+      border: 1px solid rgba(0, 255, 242, 0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .file-upload-button {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00fff2;
+      border-radius: 12px;
+      padding: 12px 24px;
+      color: #00fff2;
+      font-weight: bold;
+      font-family: 'Benzin', sans-serif;
+      cursor: none !important;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(0, 255, 242, 0.5);
+      backdrop-filter: blur(5px);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-upload-button:hover {
+      background: rgba(0, 255, 242, 0.2);
+      box-shadow: 0 0 25px rgba(0, 255, 242, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .file-upload-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 242, 0.4), transparent);
+      transition: 0.5s;
+      z-index: -1;
+    }
+
+    .file-upload-button:hover::before {
+      left: 100%;
+    }
+
+    .file-upload-button svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      margin-right: 8px;
+      transition: transform 0.3s;
+    }
+
+    .file-upload-button:hover svg {
+      transform: scale(1.2);
+    }
+
+    .file-info {
+      font-size: 14px;
+      margin-top: 5px;
+      color: rgba(255,255,255,0.7);
+      word-break: break-all;
+      text-align: center;
+    }
+
+    .file-upload-input {
+      display: none;
+    }
+
+    /* Обновленные стили для выбора фона */
     .background-select {
       position: fixed;
       top: 20px;
       right: 20px;
       z-index: 10000;
-      background: rgba(30,30,30,0.85);
-      border-radius: 12px;
-      padding: 8px 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      font-size: 16px;
-      color: #fff;
+      background: rgba(24, 28, 32, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0,255,242,0.25);
+      padding: 15px;
+      gap: 12px;
+      font-size: 18px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
+      flex-direction: row;
       align-items: center;
-      gap: 8px;
-      cursor: none;
+      border: 1px solid rgba(0, 255, 242, 0.3);
+      backdrop-filter: blur(10px);
     }
-    .background-select label, .background-select select {
-      cursor: none;
+
+    .background-select label {
+      text-shadow: 0 0 8px #00fff2;
+      font-size: 16px;
+      font-family: 'Benzin', sans-serif;
+      font-weight: bold;
+      color: #00fff2;
+      margin-right: 10px;
     }
+
     .background-select select {
-      background: #222;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 4px 12px;
+      background: rgba(24, 28, 32, 0.8);
+      color: #00fff2;
+      border: 1px solid #00fff2;
+      border-radius: 10px;
+      padding: 8px 16px;
       font-size: 16px;
       outline: none;
+      box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+      transition: all 0.3s;
+      appearance: none;
+      cursor: none !important;
+      font-family: 'Benzin', sans-serif;
+      font-weight: bold;
     }
+
+    .background-select select:focus {
+      box-shadow: 0 0 0 2px #00fff2, 0 0 20px rgba(0, 255, 242, 0.5);
+      background: rgba(24, 28, 32, 0.9);
+    }
+
+    .background-select select option {
+      background: #181c20;
+      color: #00fff2;
+      font-family: 'Benzin', sans-serif;
+      font-weight: bold;
+    }
+
+    /* Адаптив для мобильных */
+    @media (max-width: 768px) {
+      .file-upload-container {
+        right: 20px;
+        left: auto;
+        top: 80px;
+        max-width: 200px;
+      }
+      
+      .background-select {
+        flex-direction: column;
+        top: 140px;
+        right: 20px;
+        padding: 12px;
+      }
+      
+      .control-buttons {
+        flex-direction: column;
+      }
+    }
+
     @font-face {
       font-family: 'Benzin';
       src: url('benzin-bold.woff2') format('woff2');
@@ -389,81 +520,7 @@
       font-style: normal;
       font-display: swap;
     }
-    .background-select,
-    .background-select label,
-    .background-select select {
-      font-family: 'Benzin', sans-serif;
-      font-weight: bold;
-    }
-    .background-select select {
-  background: #181c20;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 18px;
-  font-size: 18px;
-  font-family: 'Benzin', sans-serif;
-  font-weight: bold;
-  outline: none;
-  box-shadow: 0 2px 12px 0 rgba(0,255,242,0.12);
-  transition: box-shadow 0.3s cubic-bezier(.4,0,.2,1), background 0.3s;
-  appearance: none;
-  position: relative;
-  z-index: 2;
-}
-
-.background-select select:focus {
-  box-shadow: 0 0 0 3px #00fff2, 0 2px 12px 0 rgba(0,255,242,0.18);
-  background: #23272b;
-}
-
-.background-select select option {
-  background: #23272b;
-  color: #fff;
-  font-family: 'Benzin', sans-serif;
-  font-weight: bold;
-  font-size: 18px;
-  border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.background-select select option:checked,
-.background-select select option:hover {
-  background: #007aff;
-  color: #fff;
-  text-shadow: 0 0 8px #00fff2, 0 0 2px #fff;
-}
-
-.background-select label {
-  text-shadow: 0 0 6px #00fff2, 0 0 2px #fff;
-  font-size: 18px;
-  font-family: 'Benzin', sans-serif;
-  font-weight: bold;
-}
-
-.background-select {
-  background: rgba(24,28,32,0.92);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px 0 rgba(0,255,242,0.10);
-  padding: 10px 22px;
-  gap: 12px;
-  font-size: 18px;
-  transition: box-shadow 0.3s;
-}
-
-.background-select select::-ms-expand {
-  display: none;
-}
-.background-select select::-webkit-scrollbar {
-  width: 8px;
-  background: #23272b;
-}
-.background-select select::-webkit-scrollbar-thumb {
-  background: #00fff2;
-  border-radius: 8px;
-}
   </style>
- 
 </head>
 <body>
 
@@ -471,19 +528,30 @@
   <canvas id="fluidCanvas"></canvas>
   <canvas id="trailCanvas"></canvas>
 
-                       <button class="play-button" id="playButton">
-       <span id="buttonText">
-         <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M8 5v14l11-7z"/>
-         </svg>
-                   <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="6" y="5" width="4" height="14" rx="2" ry="2"/>
-            <rect x="14" y="5" width="4" height="14" rx="2" ry="2"/>
-          </svg>
-       </span>
-     </button>
+  <div class="file-upload-container">
+    <button class="file-upload-button" id="fileUploadButton">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+      <span>Добавить видео/аудио</span>
+    </button>
+    <input type="file" id="fileUploadInput" class="file-upload-input" accept="audio/*,video/*" />
+    <div class="file-info" id="fileInfo"></div>
+  </div>
+
+  <button class="play-button" id="playButton">
+    <span id="buttonText">
+      <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="6" y="5" width="4" height="14" rx="2" ry="2"/>
+        <rect x="14" y="5" width="4" height="14" rx="2" ry="2"/>
+      </svg>
+    </span>
+  </button>
   <input type="range" id="seekSlider" value="0" min="0" max="100" step="1" />
-  <audio id="audio" src="JAWNY - honeypie sped up.mp3" crossorigin="anonymous"></audio>
+  <audio id="audio" crossorigin="anonymous"></audio>
 
   <div id="customCursor">
     <video id="cursorVideo" src="video_2025-07-31_22-33-25.mp4" autoplay muted loop playsinline></video>
@@ -491,14 +559,32 @@
 
   <div class="footer"><span id="dinza-link" style="color: inherit; text-decoration: none;">by dinza</span></div>
 
-     <!-- Переключатель жидкости -->
-   <div class="background-select">
-     <label for="backgroundSelect" style="user-select:none;">Фон:</label>
-     <select id="backgroundSelect">
-       <option value="default">Обычный</option>
-       <option value="fluid">Fluid</option>
-     </select>
-   </div>
+  <div class="background-select">
+    <label for="backgroundSelect" style="user-select:none;">Фон:</label>
+    <select id="backgroundSelect">
+      <option value="default">Обычный</option>
+      <option value="fluid">Fluid</option>
+    </select>
+  </div>
+
+  <!-- Кнопки управления (видны только на мобильных) -->
+  <div class="control-buttons">
+    <button class="control-button toggle-ui-button" id="toggleUIButton">
+      <svg viewBox="0 0 24 24" fill="white">
+        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+      </svg>
+    </button>
+    <button class="control-button file-upload-button-mobile" id="fileUploadButtonMobile">
+      <svg viewBox="0 0 24 24" fill="black">
+        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+      </svg>
+    </button>
+    <button class="control-button background-select-button" id="backgroundSelectButton">
+      <svg viewBox="0 0 24 24" fill="black">
+        <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+      </svg>
+    </button>
+  </div>
 
   <!-- Include WebGL Fluid -->
   <script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.3"></script>
@@ -506,10 +592,10 @@
   <script>
     const canvas = document.getElementById('visualizer');
     const ctx = canvas.getContext('2d');
-                               const playButton = document.getElementById('playButton');
-       const buttonText = document.getElementById('buttonText');
-       const playIcon = document.querySelector('.play-icon');
-       const pauseIcon = document.querySelector('.pause-icon');
+    const playButton = document.getElementById('playButton');
+    const buttonText = document.getElementById('buttonText');
+    const playIcon = document.querySelector('.play-icon');
+    const pauseIcon = document.querySelector('.pause-icon');
     const audio = document.getElementById('audio');
     const seekSlider = document.getElementById('seekSlider');
     const customCursor = document.getElementById('customCursor');
@@ -517,11 +603,88 @@
     const trailCanvas = document.getElementById('trailCanvas');
     const trailCtx = trailCanvas.getContext('2d');
     const fluidCanvas = document.getElementById('fluidCanvas');
-    const toggleFluidCheckbox = document.getElementById('toggleFluid');
-    
-    let fluidSim = null;
+    const backgroundSelect = document.getElementById('backgroundSelect');
+    const fileUploadInput = document.getElementById('fileUploadInput');
+    const fileUploadButton = document.getElementById('fileUploadButton');
+    const fileUploadButtonMobile = document.getElementById('fileUploadButtonMobile');
+    const fileInfo = document.getElementById('fileInfo');
+    const toggleUIButton = document.getElementById('toggleUIButton');
+    const backgroundSelectButton = document.getElementById('backgroundSelectButton');
+    const backgroundSelectContainer = document.querySelector('.background-select');
 
-    // Убираем старый трейл - используем только WebGL Fluid
+    let fluidSim = null;
+    let audioContext, analyser, source, dataArray, animationId;
+    let isInitialized = false;
+    let isSeeking = false;
+    let fadeOutProgress = 0;
+    let currentAudioFile = null;
+
+    // Инициализация кастомного курсора
+    customCursor.style.display = 'block';
+
+    // Убираем стандартный курсор для всех элементов
+    document.querySelectorAll('button, input, select, a').forEach(el => {
+      el.style.cursor = 'none';
+    });
+
+    // Обработчик клика по кнопке добавления файла (десктоп)
+    fileUploadButton.addEventListener('click', function() {
+      fileUploadInput.click();
+    });
+
+    // Обработчик клика по кнопке добавления файла (мобильный)
+    fileUploadButtonMobile.addEventListener('click', function() {
+      fileUploadInput.click();
+    });
+
+    // Обработчик выбора файла
+    fileUploadInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      currentAudioFile = file;
+      fileInfo.textContent = file.name.replace(/\.[^/.]+$/, ""); // Удаляем расширение файла
+
+      // Создаем URL для файла
+      const fileURL = URL.createObjectURL(file);
+      
+      // Устанавливаем источник для audio элемента
+      audio.src = fileURL;
+      
+      // Сбрасываем состояние плеера
+      playButton.classList.remove('playing');
+      seekSlider.value = 0;
+      seekSlider.style.setProperty('--value', '0%');
+      
+      // Сбрасываем визуализатор
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+      
+      isInitialized = false;
+      canvas.style.opacity = '0';
+    });
+
+    // Обработчик кнопки переключения интерфейса
+    toggleUIButton.addEventListener('click', function() {
+      document.body.classList.toggle('ui-hidden');
+    });
+
+    // Обработчик кнопки выбора фона
+    backgroundSelectButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      backgroundSelectContainer.classList.toggle('active');
+    });
+
+    // Закрываем меню при клике в любом месте
+    document.addEventListener('click', function(e) {
+      if (!backgroundSelectContainer.contains(e.target) && 
+          e.target !== backgroundSelectButton &&
+          e.target !== backgroundSelect) {
+        backgroundSelectContainer.classList.remove('active');
+      }
+    });
 
     function startFluid() {
       fluidCanvas.style.display = 'block';
@@ -544,27 +707,15 @@
           TRANSPARENT: false,
           BACKGROUND_COLOR: { r: 0, g: 0, b: 0 }
         });
-        
-        // Fluid canvas готов к работе
       } else {
         fluidCanvas.style.display = 'block';
-        // Просто возобновляем анимацию
-        // if (fluidSim && fluidSim.PAUSED !== undefined) {
-        //   fluidSim.PAUSED = false;
-        // }
       }
     }
 
     function stopFluid() {
       fluidCanvas.style.display = 'none';
-      // Останавливаем анимацию, но не удаляем simulation
-      // if (fluidSim && fluidSim.PAUSED !== undefined) {
-      //   fluidSim.PAUSED = true;
-      // }
     }
 
-    // Удаляем старый код toggleFluidCheckbox и заменяем на select
-    const backgroundSelect = document.getElementById('backgroundSelect');
     backgroundSelect.addEventListener('change', function() {
       if (this.value === 'fluid') {
         startFluid();
@@ -573,8 +724,9 @@
         stopFluid();
         document.body.style.background = '#222';
       }
+      backgroundSelectContainer.classList.remove('active');
     });
-    // При загрузке страницы выставить фон по умолчанию
+
     window.addEventListener('DOMContentLoaded', function() {
       if (backgroundSelect.value === 'fluid') {
         startFluid();
@@ -585,15 +737,8 @@
       }
     });
 
-    let audioContext, analyser, source, dataArray, animationId;
-    let isInitialized = false;
-    let isSeeking = false;
-    let fadeOutProgress = 0;
-
-    // Убираем обработчик старого трейла
-
     function draw() {
-    const bufferLength = analyser.frequencyBinCount;
+      const bufferLength = analyser.frequencyBinCount;
       const half = Math.floor(bufferLength / 2);
       const centerX = canvas.width / 2;
       const barSpacing = 4;
@@ -601,12 +746,12 @@
 
       function animate() {
         animationId = requestAnimationFrame(animate);
-      analyser.getByteFrequencyData(dataArray);
+        analyser.getByteFrequencyData(dataArray);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         let allZero = true;
-      for (let i = 0; i < bufferLength; i++) {
+        for (let i = 0; i < bufferLength; i++) {
           if (dataArray[i] > 0) { allZero = false; break; }
         }
 
@@ -642,48 +787,53 @@
       animate();
     }
 
-                                       playButton.addEventListener('click', async () => {
-         playButton.classList.toggle('playing');
+    playButton.addEventListener('click', async () => {
+      if (!currentAudioFile) {
+        alert('Пожалуйста, сначала добавьте аудиофайл');
+        return;
+      }
 
-         try {
-           if (!isInitialized) {
-             if (!audioContext) {
-               audioContext = new (window.AudioContext || window.webkitAudioContext)();
-             }
+      playButton.classList.toggle('playing');
 
-             if (audioContext.state === "suspended") {
-               await audioContext.resume();
-             }
+      try {
+        if (!isInitialized) {
+          if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          }
 
-             if (!source) {
-               source = audioContext.createMediaElementSource(audio);
-               analyser = audioContext.createAnalyser();
-               source.connect(analyser);
-               analyser.connect(audioContext.destination);
-               analyser.fftSize = 64;
-               dataArray = new Uint8Array(analyser.frequencyBinCount);
-             }
+          if (audioContext.state === "suspended") {
+            await audioContext.resume();
+          }
 
-             await audio.play();
-             draw();
-             isInitialized = true;
-             canvas.style.opacity = 1;
-           } else {
-             if (audio.paused) {
-               if (audioContext.state === "suspended") {
-                 await audioContext.resume();
-               }
-               await audio.play();
-               draw();
-             } else {
-               audio.pause();
-             }
-           }
-         } catch (err) {
-           console.error("Ошибка воспроизведения:", err);
-           alert("Браузер заблокировал воспроизведение. Попробуйте снова нажать Play.");
-         }
-       });
+          if (!source) {
+            source = audioContext.createMediaElementSource(audio);
+            analyser = audioContext.createAnalyser();
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            analyser.fftSize = 64;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+          }
+
+          await audio.play();
+          draw();
+          isInitialized = true;
+          canvas.style.opacity = 1;
+        } else {
+          if (audio.paused) {
+            if (audioContext.state === "suspended") {
+              await audioContext.resume();
+            }
+            await audio.play();
+            draw();
+          } else {
+            audio.pause();
+          }
+        }
+      } catch (err) {
+        console.error("Ошибка воспроизведения:", err);
+        alert("Браузер заблокировал воспроизведение. Попробуйте снова нажать Play.");
+      }
+    });
 
     audio.addEventListener('timeupdate', () => {
       if (!isSeeking) {
@@ -704,16 +854,14 @@
       isSeeking = false;
     });
 
-                                       audio.addEventListener('ended', () => {
-         playButton.classList.remove('playing');
-         seekSlider.value = 0;
-         seekSlider.style.setProperty('--value', `0%`);
-         audio.currentTime = 0;
-       });
+    audio.addEventListener('ended', () => {
+      playButton.classList.remove('playing');
+      seekSlider.value = 0;
+      seekSlider.style.setProperty('--value', `0%`);
+      audio.currentTime = 0;
+    });
 
-    // Простая анимация курсора без трейла
-    customCursor.classList.add('visible');
-
+    // Анимация кастомного курсора
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let cursorX = mouseX;
@@ -740,7 +888,6 @@
       mouseY = e.clientY;
     });
 
-    // Добавляем анимацию нажатия для курсора
     document.addEventListener('mousedown', () => {
       customCursor.classList.add('click');
     });
@@ -749,8 +896,7 @@
       customCursor.classList.remove('click');
     });
 
-    // Добавляем анимацию при наведении на интерактивные элементы
-    const interactiveElements = [playButton, seekSlider, backgroundSelect];
+    const interactiveElements = [playButton, seekSlider, backgroundSelect, fileUploadButton, fileUploadButtonMobile, backgroundSelectButton, toggleUIButton];
     
     interactiveElements.forEach(element => {
       if (element) {
@@ -764,26 +910,23 @@
       }
     });
 
-         function animateCursor() {
-       cursorX += (mouseX - cursorX) * 0.15;
-       cursorY += (mouseY - cursorY) * 0.15;
+    function animateCursor() {
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
 
-       // Проверяем, находится ли курсор в пределах страницы
-       const isInViewport = mouseX >= 0 && mouseX <= window.innerWidth && 
-                           mouseY >= 0 && mouseY <= window.innerHeight;
-       
-       // Если мышь вне окна — opacity 0
-       const targetOpacity = (isInViewport && isCursorInWindow) ? 1 : 0;
-       // Плавно изменяем прозрачность
-       const currentOpacity = parseFloat(customCursor.style.opacity) || 1;
-       const newOpacity = currentOpacity + (targetOpacity - currentOpacity) * 0.1;
-       
-       customCursor.style.opacity = newOpacity;
-       customCursor.style.left = cursorX + 'px';
-       customCursor.style.top = cursorY + 'px';
+      const isInViewport = mouseX >= 0 && mouseX <= window.innerWidth && 
+                          mouseY >= 0 && mouseY <= window.innerHeight;
+      
+      const targetOpacity = (isInViewport && isCursorInWindow) ? 1 : 0;
+      const currentOpacity = parseFloat(customCursor.style.opacity) || 1;
+      const newOpacity = currentOpacity + (targetOpacity - currentOpacity) * 0.1;
+      
+      customCursor.style.opacity = newOpacity;
+      customCursor.style.left = cursorX + 'px';
+      customCursor.style.top = cursorY + 'px';
 
-       requestAnimationFrame(animateCursor);
-     }
+      requestAnimationFrame(animateCursor);
+    }
     animateCursor();
 
     document.getElementById('dinza-link').addEventListener('click', function() {
